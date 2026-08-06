@@ -29,6 +29,9 @@ pipeline {
         IMAGE_TAG =
         "${BUILD_NUMBER}"
 
+        LATEST_TAG = "latest"
+
+
     }
 
     stages {
