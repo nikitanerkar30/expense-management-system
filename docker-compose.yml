@@ -1,0 +1,42 @@
+version: "3.8"
+
+services:
+
+  mysql:
+    image: expense-mysql-image
+    container_name: expense-mysql
+    ports:
+      - "3306:3306"
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: expense_db
+      MYSQL_USER: expense_app
+      MYSQL_PASSWORD: Expense@123
+    networks:
+      - expense-network
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot123" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  expense-management-system:
+    image: expense-management-system:latest
+    container_name: expense-management-system
+    depends_on:
+      mysql:
+        condition: service_healthy
+    ports:
+      - "8086:8086"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/expense_db?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: expense_app
+      SPRING_DATASOURCE_PASSWORD: Expense@123
+
+    networks:
+      - expense-network
+networks:
+  expense-network:
+    driver: bridge

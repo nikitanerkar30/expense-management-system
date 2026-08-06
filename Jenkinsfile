@@ -21,6 +21,16 @@ pipeline {
         timeout(time: 30, unit: 'MINUTES')
     }
 
+     environment {
+
+        IMAGE_NAME =
+        "nikitaharesh/expense-management-system"
+
+        IMAGE_TAG =
+        "${BUILD_NUMBER}"
+
+    }
+
     stages {
 
         stage('Checkout Code') {
@@ -48,6 +58,51 @@ pipeline {
                 '''
             }
         }
+
+                stage('Docker Build') {
+
+            steps {
+
+                dockerBuild(
+                    IMAGE_NAME,
+                    IMAGE_TAG
+                )
+
+            }
+
+        }
+
+         stage('Docker Login') {
+
+            steps {
+
+                dockerLogin(
+                    "dockerhub-user",
+                    "docker-password"
+                )
+
+            }
+
+        }
+
+             stage('Docker Push') {
+
+            steps {
+
+                dockerPush(
+                    IMAGE_NAME,
+                    IMAGE_TAG
+                )
+
+            }
+
+        }
+
+
+
+
+
+
 
     }
 
