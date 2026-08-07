@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: PersistentVolume  #This is the actual storage resource.
+
+metadata:
+  name: mysql-pvc
+
+  labels:
+    type: local
+    app: mysql
+
+spec: 
+  storageClassName: manual
+  capacity:
+     storage: 5Gi   #MySQL can use maximum 5 GB.
+  accessModes:
+    - ReadWriteOnce   #One node can mount it as read/write.
+  persistentVolumeReclaimPolicy: Retain   #If PVC is deleted: Your MySQL data will not be automatically deleted.
+  hostPath:
+    path: /data/mysql  #Because we are running Minikube locally.The data will be stored inside the Minikube node.
+    

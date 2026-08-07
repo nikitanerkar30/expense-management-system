@@ -1,0 +1,14 @@
+
+
+apiVersion: v1
+kind: PersistentVolumeClaim  #The PV we created earlier is the actual storage:,PVC is the application's request for that storage:
+metadata:
+  name: mysql-pvc
+  namespace: expense-dev
+spec:   # Important matching PVC: must match PV:
+   storageClassName: manual
+   accessModes:
+     - ReadWriteOnce
+   resources:
+    requests: 
+      storage: 5Gi  

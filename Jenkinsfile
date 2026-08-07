@@ -103,7 +103,22 @@ pipeline {
 
 
 
+          stage('Deploy to Kubernetes') {
+              steps {
+                  deployKubernetes(
+                      IMAGE_NAME,
+                      IMAGE_TAG
+                  )
+              }
+            }
 
+            stage('Cleanup') {
+            steps {
+                sh '''
+                docker image prune -f
+                '''
+               }
+            }
 
 
 
@@ -113,6 +128,11 @@ pipeline {
 
         always {
             archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+
+               sh '''
+                kubectl get pods -n expense-dev || true
+                kubectl get svc -n expense-dev || true
+                '''
         }
 
         success {
