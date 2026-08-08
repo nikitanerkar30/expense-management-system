@@ -22,7 +22,7 @@ spec:
       containers:
         - name: expense-app
 
-          image: nikitaharesh/expense-management-system:${IMAGE_TAG}
+          image: nikitaharesh/expense-management-system:latest
 
           imagePullPolicy: Always
 
